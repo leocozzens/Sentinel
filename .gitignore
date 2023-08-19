@@ -59,3 +59,7 @@ dkms.conf
 
 # Test text files
 *.test
+
+# Binaries
+bin/
+obj/
