@@ -1,12 +1,13 @@
 CC = gcc
+EXT = c
 CFLAGS = -Iinclude -g -Wall
 SRC = src
 OBJ = obj
 BINDIR = bin
-PROJNAME = WebPlay
+PROJNAME = Sentinel
 BINNAME = $(PROJNAME).bin
-SRCS = $(wildcard $(SRC)/*.c)
-OBJS = $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+SRCS = $(wildcard $(SRC)/*.$(EXT))
+OBJS = $(patsubst $(SRC)/%.$(EXT), $(OBJ)/%.o, $(SRCS))
 BIN = $(BINDIR)/$(BINNAME)
 
 SUBMITNAME = $(PROJECT_NAME).zip
@@ -19,19 +20,19 @@ release: CFLAGS = -Iinclude -O2
 release: new
 
 $(BIN): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ -lncurses
+	$(CC) $(CFLAGS) $(OBJS) -o $@
 
-$(OBJ)/%.o: $(SRC)/%.c
+$(OBJ)/%.o: $(SRC)/%.$(EXT)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-%.o: $(SRC)/%.c
+%.o: $(SRC)/%.$(EXT)
 	$(CC) $(CFLAGS) -c $< -o $(OBJ)/$@	
 
 link: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(BIN)
 
 clean:
-	rm $(BINDIR)/* $(OBJ)/*
+	rm -r $(BINDIR) $(OBJ)
 
 create_dirs:
 	@mkdir -p $(BINDIR) $(OBJ)
