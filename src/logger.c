@@ -13,11 +13,11 @@ static FILE *init_logger(char *fileName) {
 }
 
 void *run_logger(void *arg) {
-    FileData *fd = arg;
-    FILE *outFile = init_logger(fd->fileName);
+    LogData *ld = arg;
+    FILE *outFile = init_logger(ld->fileName);
     int i = 0;
     while(i++ < 5) {
-        fprintf(outFile, fd->formatString, EXAMPLE_IP, EXAMPLE_PROTO, ENDL);
+        fprintf(outFile, ld->formatString, EXAMPLE_IP, EXAMPLE_PROTO, ENDL);
         sleep(1);
     }
     fclose(outFile);

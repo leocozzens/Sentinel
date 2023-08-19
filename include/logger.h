@@ -4,7 +4,7 @@
 typedef struct {
     char *fileName;
     char *formatString;
-} FileData;
+} LogData;
 
 void *run_logger(void *arg);
 

@@ -7,9 +7,9 @@
 #define FORMAT_STRING "IP: %s, PROTOCOL: %s%c"
 
 int main(void) {
-    FileData fd = { FILE_NAME, FORMAT_STRING };
-    pthread_t logger;
-    pthread_create(&logger, NULL, run_logger, &fd);
+    LogData ld = { FILE_NAME, FORMAT_STRING };
+    pthread_t logger, watchdog;
+    pthread_create(&logger, NULL, run_logger, &ld);
     pthread_join(logger, NULL);
     return 0;
 }
