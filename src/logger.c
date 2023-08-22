@@ -71,9 +71,8 @@ void *run_logger(void *arg) {
     }
     while(lData->runLogger) {
         sem_wait(&lData->logCount);
-        print_log(lData->formatString, lData->lQueue.head);
-        print_log(lData->formatString, lData->lQueue.tail);
-        file_close("a.test");
+        LogType *outType = log_dequeue(&lData->lQueue);
+        if(outType != NULL) print_log(lData->formatString, outType);
     }
     file_close_all(1);
     return NULL;

@@ -20,12 +20,13 @@ int main(void) {
     log_fill_type(newType + 1, "b.test", EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
     LogData lData = { FORMAT_STRING, .runLogger = 1 };
     log_queue_init(&lData.lQueue);
-    lData.lQueue.head = newType;
-    lData.lQueue.tail = newType + 1;
     sem_init(&lData.logCount, 0, 0);
 
     pthread_t logger, watchdog;
     pthread_create(&logger, NULL, run_logger, &lData);
+    log_enqueue(&lData.lQueue, newType);
+    log_enqueue(&lData.lQueue, newType + 1);
+    sem_post(&lData.logCount);
     sem_post(&lData.logCount);
     close_logger(&lData.logCount, &lData.runLogger);
 
