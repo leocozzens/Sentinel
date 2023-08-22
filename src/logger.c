@@ -4,9 +4,13 @@
 // C standard library
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 // Local headers
 #include <logger.h>
 #include <file_handler.h>
+
+#define FILE_STORE_INIT_SIZE 3
 
 typedef struct tm Tm;
 static Tm *take_time(void) {
@@ -56,13 +60,22 @@ void log_fill_type(LogType *newType, char *fileName, char *ruleType, char *ruleN
 
 void *run_logger(void *arg) {
     LogData *lData = arg;
-    file_init_store(10);
+    int initRetval = file_init_store(FILE_STORE_INIT_SIZE, NULL);
+    if(initRetval == -1) {
+        fprintf(stderr, "ERROR: %s\n", MEM_ERR);
+        return NULL;
+    }
+    else if(initRetval == -2) {
+        fprintf(stderr, "ERROR: %s\n", strerror(errno));
+        return NULL;
+    }
     while(lData->runLogger) {
         sem_wait(&lData->logCount);
         print_log(lData->formatString, lData->lQueue.head);
         print_log(lData->formatString, lData->lQueue.tail);
+        file_close("a.test");
     }
-    file_close_all();
+    file_close_all(1);
     return NULL;
 }
 
