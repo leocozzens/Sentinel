@@ -4,9 +4,9 @@
 // Local headers
 #include <logger.h>
 
-#define FILE_NAME "a.test"
 #define FORMAT_STRING "%02d:%02d:%02d %s|%s [%s] {%s} %s%c"
 
+#define EXAMPLE_FILE_NAME "a.test"
 #define EXAMPLE_RULE_TYPE "ALERT"
 #define EXAMPLE_RULE_NAME "INCOMING TRAFFIC"
 #define EXAMPLE_IP        "192.168.0.1"
@@ -16,7 +16,7 @@
 
 int main(void) {
     LogType newType;
-    log_fill_type(&newType, "a.test", EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
+    log_fill_type(&newType, EXAMPLE_FILE_NAME, EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
     LogData lData = { FORMAT_STRING, .runLogger = 1 };
     log_queue_init(&lData.lQueue);
     lData.lQueue.head = &newType;

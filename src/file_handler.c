@@ -1,6 +1,7 @@
 // C standard library
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdarg.h>
 
 #include <time.h>
@@ -8,8 +9,8 @@
 typedef struct {
     FILE **filePtrs;
     char **fileNames;
-    int activeFiles;
-    int storeSize;
+    unsigned int activeFiles;
+    unsigned int storeSize;
 } FileStore;
 
 // Static functions
@@ -26,17 +27,30 @@ _Bool file_init_store(int storeSize) {
     if(outFiles.fileNames == NULL) return 1;
     outFiles.activeFiles = 0;
     outFiles.storeSize = storeSize;
-    outFiles.filePtrs[0] = open_file("a.test");
-    outFiles.activeFiles++;
     return 0;
 }
 
 _Bool file_print(char *fileName, char *formatString, ...) {
-    va_list args;
-    va_start(args, formatString);
-    vfprintf(outFiles.filePtrs[0], formatString, args);
-    va_end(args);
-    fflush(outFiles.filePtrs[0]);
+    int fileIndex;
+    _Bool found = 0;
+    for(int i = 0; i < outFiles.activeFiles; i++) {
+        if(strcmp(fileName, outFiles.fileNames[i])) {
+            fileIndex = i;
+            found = 1;
+            break;
+        }
+    }
+    if(!found) {
+        outFiles.filePtrs[outFiles.activeFiles] = open_file(fileName);
+        if(outFiles.filePtrs[outFiles.activeFiles] == NULL) return 1;
+        outFiles.fileNames[outFiles.activeFiles] = fileName;
+        fileIndex = outFiles.activeFiles++;
+    }
+    va_list printArgs;
+    va_start(printArgs, formatString);
+    vfprintf(outFiles.filePtrs[fileIndex], formatString, printArgs);
+    va_end(printArgs);
+    fflush(outFiles.filePtrs[fileIndex]);
     return 0;
 }
 

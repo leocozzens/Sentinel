@@ -36,7 +36,6 @@ void log_queue_init(LogQueue *lQueue) {
 void log_enqueue(LogQueue *lQueue, LogType *newType) {
     newType->nextType = NULL;
     pthread_mutex_lock(&lQueue->queueLock);
-    newType->inUse = 1;
     if(lQueue->head == NULL) lQueue->head = newType;
     else lQueue->tail->nextType = newType;
     lQueue->tail = newType;
@@ -52,6 +51,7 @@ void log_fill_type(LogType *newType, char *fileName, char *ruleType, char *ruleN
     newType->protocol = protocol;
     newType->message = msg;
     newType->endl = endl;
+    newType->inUse = 1;
 }
 
 void *run_logger(void *arg) {
