@@ -34,7 +34,7 @@ _Bool file_print(char *fileName, char *formatString, ...) {
     int fileIndex;
     _Bool found = 0;
     for(int i = 0; i < outFiles.activeFiles; i++) {
-        if(strcmp(fileName, outFiles.fileNames[i])) {
+        if(strcmp(fileName, outFiles.fileNames[i]) == 0) {
             fileIndex = i;
             found = 1;
             break;

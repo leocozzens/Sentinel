@@ -16,10 +16,13 @@
 
 int main(void) {
     LogType newType;
-    log_fill_type(&newType, EXAMPLE_FILE_NAME, EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
+    LogType newType1;
+    log_fill_type(&newType, "b.test", EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
+    log_fill_type(&newType1, "a.test", EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
     LogData lData = { FORMAT_STRING, .runLogger = 1 };
     log_queue_init(&lData.lQueue);
     lData.lQueue.head = &newType;
+    lData.lQueue.tail = &newType1;
     sem_init(&lData.logCount, 0, 0);
 
     pthread_t logger, watchdog;
