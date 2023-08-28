@@ -3,6 +3,10 @@
 #include <semaphore.h>
 // Local headers
 #include <logger.h>
+#include <unistd.h>
+
+#define QUEUE_LENGTH 2
+#define QUEUE_GROWTH_FACTOR
 
 #define FORMAT_STRING "%02d:%02d:%02d %s|%s [%s] {%s} %s%c"
 
@@ -15,7 +19,7 @@
 #define ENDL              '\n'
 
 int main(void) {
-    LogType newType[10];
+    LogType newType[QUEUE_LENGTH];
     log_fill_type(newType, "a.test", EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
     log_fill_type(newType + 1, "b.test", EXAMPLE_RULE_TYPE, EXAMPLE_RULE_NAME, EXAMPLE_IP, EXAMPLE_PROTO, EXAMPLE_MSG, ENDL);
     LogData lData = { FORMAT_STRING, .runLogger = 1 };

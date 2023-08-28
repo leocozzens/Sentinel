@@ -10,9 +10,18 @@
 #include <logger.h>
 #include <file_handler.h>
 
+#define CHUNK_SIZE 64
 #define FILE_STORE_INIT_SIZE 3
 
 typedef struct tm Tm;
+
+typedef struct _LogChunk {
+    LogQueue lQueue;
+    unsigned int size;
+    struct _LogChunk *nextChunk;
+} LogChunk;
+
+
 static Tm *take_time(void) {
     time_t currentTime = time(NULL);
     return localtime(&currentTime);
@@ -30,6 +39,18 @@ static LogType *log_dequeue(LogQueue *lQueue) {
     lQueue->head = tmp->nextType;
     pthread_mutex_unlock(&lQueue->queueLock);
     return tmp;
+}
+
+_Bool log_pool_create(unsigned int initSize, unsigned int growthFactor) {
+    pool.logPool = malloc(sizeof(LogType) * initSize);
+    if(pool.logPool == NULL) return 1;
+    pool.size = initSize;
+    pool.growthFactor = growthFactor;
+    return 0;
+}
+
+LogType *log_pool_get(void) {
+
 }
 
 void log_queue_init(LogQueue *lQueue) {
